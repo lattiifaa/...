@@ -1,0 +1,32 @@
+if __name__ == "__main__":
+    # Create test instances of the classes
+    ebook = EBook("https://ebook.com")
+    customer = Customer("Maryam Saeed", "maryam.saeed@email.com", "123456789", True)
+    order = Order("2024-10-12", 100.0, customer)
+    payment = Payment("2024-10-12", 100.0)
+    discount = Discount(0.10, 0.05)
+    catalog = Catalog()
+    cart = ShoppingCart()
+    invoice = Invoice("2024-10-12", [ebook], 100.0)
+
+    #Add the eBook to the catalog
+    catalog.add_ebook(ebook)
+    assert len(catalog._Catalog__ebook_list) == 1, "Test failed: eBook was not added to catalog"
+
+    #Add the eBook to the shopping cart
+    cart.add_item(ebook)
+    assert cart._ShoppingCart__total_quantity == 1, "Test failed: eBook was not added to shopping cart"
+
+    #Process the payment for the order
+    assert payment.process_payment(order) is True, "Test failed: Payment should be successful"
+
+    #Apply loyalty discount
+    loyalty_discount = discount.apply_loyalty_discount(customer)
+    assert loyalty_discount == 0.10, "Test failed: Loyalty discount should be 0.10"
+
+    #Generate invoice and check the output
+    invoice_text = invoice.generate_invoice(order)
+    expected_invoice_text = "Invoice(Date: 2024-10-12, Subtotal: 100.0, Total with VAT: 108.0)"
+    assert invoice_text == expected_invoice_text, "Test failed: Invoice text does not match expected output"
+
+    print("All tests passed!")
